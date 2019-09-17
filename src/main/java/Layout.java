@@ -8,7 +8,6 @@ public class Layout {
     private ArrayList<Room> rooms;
     private String currentRoomName;
     private int currentRoomIndex;
-    private boolean hasBegun = false;
 
     //-----------------------------------Constructor and Getter Methods------------------------------------------------
     public Layout() {
@@ -25,6 +24,15 @@ public class Layout {
     public ArrayList<Room> getRooms() {
         return rooms;
     }
+
+    public String getCurrentRoomName() {
+        return currentRoomName;
+    }
+
+    public int getCurrentRoomIndex() {
+        return currentRoomIndex;
+    }
+
     //----------------------------------------Starting Room Index Initializer------------------------------------------
     public void adventureBegin() {
         currentRoomName = startingRoom;
@@ -33,7 +41,6 @@ public class Layout {
         if (currentRoomIndex == -1) {
             return;
         }
-        adventureOutput();
     }
 
     //-----------------------------------------Input/Output Methods----------------------------------------------------
@@ -98,12 +105,12 @@ public class Layout {
 
         for (int directionIndex = 0; directionIndex < numDirections; directionIndex++) {
 
-            String tempDirectionName =
-                    getRooms().get(currentRoomIndex).getDirections().get(directionIndex).getDirectionName();
+            String tempDirect = getRooms().get(currentRoomIndex).getDirections().get(directionIndex).getDirectionName();
+            String tempRoomName = getRooms().get(currentRoomIndex).getDirections().get(directionIndex).getRoom();
 
-            if (tempDirectionName.equalsIgnoreCase(direction)) {
+            if (tempDirect.equalsIgnoreCase(direction)) {
                 isDirectionPossible = true;
-                currentRoomName = getRooms().get(currentRoomIndex).getDirections().get(directionIndex).getRoom();
+                currentRoomName = tempRoomName;
                 break;
             }
 
