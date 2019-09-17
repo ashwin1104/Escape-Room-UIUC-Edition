@@ -1,9 +1,12 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Layout {
     private String startingRoom;
     private String endingRoom;
-    private Room[] rooms;
+    private ArrayList<Room> rooms;
 
-    public Layout(String startingRoom, String endingRoom, Room[] rooms) {
+    public Layout(String startingRoom, String endingRoom, ArrayList<Room> rooms) {
         this.startingRoom = startingRoom;
         this.endingRoom = endingRoom;
         this.rooms = rooms;
@@ -17,7 +20,7 @@ public class Layout {
         return endingRoom;
     }
 
-    public Room[] getRooms() {
+    public ArrayList<Room> getRooms() {
         return rooms;
     }
 }

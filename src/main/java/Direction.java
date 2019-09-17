@@ -2,7 +2,7 @@ public class Direction {
     private String directionName;
     private String room;
 
-    public Layout(String directionName, String room) {
+    public Direction(String directionName, String room) {
         this.directionName = directionName;
         this.room = room;
     }

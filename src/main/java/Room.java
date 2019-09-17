@@ -1,9 +1,11 @@
+import java.util.ArrayList;
+
 public class Room {
     private String name;
     private String description;
-    private Direction[] directions;
+    private ArrayList<Direction> directions;
 
-    public Room(String name, String description, Direction[] directions) {
+    public Room(String name, String description, ArrayList<Direction> directions) {
         this.name = name;
         this.description = description;
         this.directions = directions;
@@ -17,7 +19,7 @@ public class Room {
         return description;
     }
 
-    public Direction[] getDirections() {
+    public ArrayList<Direction> getDirections() {
         return directions;
     }
 }
