@@ -1,18 +1,14 @@
 import com.google.gson.Gson;
 
-import java.net.*;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
+import java.io.IOException;
 
 public class Adventure {
+    public static void main(String[] args) throws IOException {
+        String myJSON = ReadJSON.readFromURL("https://courses.grainger.illinois.edu/cs126/fa2019/assignments/siebel.json");
+        //String myJSON = Data.getFileContents("src", "siebel.json");
+        Gson gson = new Gson();
+        Layout layout = gson.fromJson(myJSON, Layout.class);
 
-    public static String readFromURL(String requestURL) throws IOException {
-        try (Scanner scanner = new Scanner(new URL(requestURL).openStream(),
-                StandardCharsets.UTF_8.toString()))
-        {
-            scanner.useDelimiter("\\A");
-            return scanner.hasNext() ? scanner.next() : "";
-        }
+        layout.adventureOutput();
     }
 }
