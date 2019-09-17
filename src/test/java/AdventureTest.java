@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
 import org.junit.After;
@@ -52,7 +53,14 @@ public class AdventureTest {
     public void testAdventureBeginRoomIndexInitialize() {
         assertEquals(layout.getCurrentRoomIndex(), 0);
     }
-    
+    @Test
+    public void testDirectionValidityProper() {
+        assertTrue(layout.checkDirectionValidity("go East"));
+    }
+    @Test
+    public void testDirectionValidityIgnoreCaseProper() {
+        assertTrue(layout.checkDirectionValidity("gO eAsT"));
+    }
     /*@Test
     public void testHandleDirectionProper() {
         layout.handleDirection("East");

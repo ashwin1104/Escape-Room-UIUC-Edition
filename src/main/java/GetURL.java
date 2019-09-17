@@ -11,12 +11,12 @@ public class GetURL {
         if (url == null || url.equalsIgnoreCase("None") || !isURLValid(url)) {
             System.out.println("You either specified no URL or an incorrect URL.");
             System.out.println("Default URL will be used for your Adventure game.");
+            System.out.println("");
             return "https://courses.grainger.illinois.edu/cs126/fa2019/assignments/siebel.json";
         }
         return url;
     }
     public static boolean isURLValid(String url) {
-        /* Try creating a valid URL */
         try {
             new URL(url).toURI();
             return true;

@@ -71,20 +71,33 @@ public class Layout {
     }
 
     public void handleDirection(String direction) {
-        if (direction.equalsIgnoreCase("exit") || direction.equalsIgnoreCase("quit")) {
-            System.out.println("Bye! Thanks for playing!");
+        if (direction == null) {
+            System.out.println("No input given");
             return;
         }
 
-        boolean isDirectionPossible = checkDirectionValidity(direction);
+        if (direction.equalsIgnoreCase("exit") || direction.equalsIgnoreCase("quit")) {
+                System.out.println("Bye! Thanks for playing!");
+                return;
+        }
 
-        if (isDirectionPossible) {
-            updateRoomIndex();
-            adventureOutput();
-            return;
+        if (direction.substring(0,3).equalsIgnoreCase("go ")) {
+            boolean isDirectionPossible = checkDirectionValidity(direction.substring(3));
+
+            if (isDirectionPossible) {
+                updateRoomIndex();
+                adventureOutput();
+                return;
+            }
+            else {
+                System.out.println("I can't " + direction + "!");
+                System.out.println("From here, you can go: " + getValidDirections());
+                adventureInput();
+            }
+
         }
         else {
-            System.out.println("I can't go " + direction + "!");
+            System.out.println("I don't understand '" + direction + "'");
             System.out.println("From here, you can go: " + getValidDirections());
             adventureInput();
         }
