@@ -10,10 +10,8 @@ public class Adventure {
     private String startingRoom;
     private String endingRoom;
 
-    public Adventure(Layout layout, String startingRoom, String endingRoom) {
+    public Adventure(Layout layout) {
         this.layout = layout;
-        this.startingRoom = startingRoom;
-        this.endingRoom = endingRoom;
     }
 
     public Adventure() {
@@ -31,6 +29,7 @@ public class Adventure {
     public String getEndingRoom() {
         return endingRoom;
     }
+
     public static String readFromURL(String requestURL) throws IOException {
         try (Scanner scanner = new Scanner(new URL(requestURL).openStream(),
                 StandardCharsets.UTF_8.toString()))
