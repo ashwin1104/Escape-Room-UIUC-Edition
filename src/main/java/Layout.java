@@ -10,6 +10,7 @@ public class Layout {
     private int currentRoomIndex;
     private boolean hasBegun = false;
 
+    //-----------------------------------Constructor and Getter Methods------------------------------------------------
     public Layout() {
     }
 
@@ -24,86 +25,115 @@ public class Layout {
     public ArrayList<Room> getRooms() {
         return rooms;
     }
-
-    public void adventureOutput() {
-        if (!hasBegun) {
-            currentRoomName = startingRoom;
-            currentRoomIndex = -1;
-            hasBegun = true;
-            for (int index = 0; index < getRooms().size(); index++) {
-                if (getRooms().get(index).getName().equals(currentRoomName)) {
-                    currentRoomIndex = index;
-                }
-            }
-            if (currentRoomIndex == -1) {
-                return;
-            }
+    //----------------------------------------Starting Room Index Initializer------------------------------------------
+    public void adventureBegin() {
+        currentRoomName = startingRoom;
+        currentRoomIndex = -1;
+        updateRoomIndex();
+        if (currentRoomIndex == -1) {
+            return;
         }
+        adventureOutput();
+    }
 
+    //-----------------------------------------Input/Output Methods----------------------------------------------------
+    public void adventureOutput() {
         if (currentRoomName.equals(endingRoom)) {
             System.out.println("You have reached the final room: " + endingRoom + ". Congratulations!");
             return;
         }
 
-        System.out.println(getRooms().get(currentRoomIndex).getDescription());
+        String currentDesc = getRooms().get(currentRoomIndex).getDescription();
+        System.out.println(currentDesc);
 
-        if (currentRoomName == startingRoom) {
+        if (currentRoomName.equals(startingRoom)) {
             System.out.println("Your journey begins here");
         }
 
-        String directions = "";
-        for (int index = 0; index < getRooms().get(currentRoomIndex).getDirections().size(); index++) {
-            if (index + 1 == getRooms().get(currentRoomIndex).getDirections().size()) {
-                if (index != 0) {
-                    directions += "or ";
-                }
-                directions += getRooms().get(currentRoomIndex).getDirections().get(index).getDirectionName();
-            }
-            else {
-                directions += getRooms().get(currentRoomIndex).getDirections().get(index).getDirectionName() + ", ";
-            }
-        }
-        System.out.println("From here, you can go: " + directions);
+        System.out.println("From here, you can go: " + getValidDirections());
         adventureInput();
     }
 
 
     public void adventureInput() {
-        Scanner myResp = new Scanner(System.in);
+        Scanner userResponse = new Scanner(System.in);
         System.out.println("Which direction would you like to go?");
 
-        String nextResp = myResp.nextLine();
-        updateRoom(nextResp);
+        String direction = userResponse.nextLine();
+        handleDirection(direction);
     }
 
-    public void updateRoom(String direction) {
+    public void handleDirection(String direction) {
         if (direction.equalsIgnoreCase("exit") || direction.equalsIgnoreCase("quit")) {
-            currentRoomName = startingRoom;
-            currentRoomIndex = -1;
+            System.out.println("Bye! Thanks for playing!");
             return;
         }
-        boolean isDirectionPossible = false;
-        for (int index = 0; index < getRooms().get(currentRoomIndex).getDirections().size(); index++) {
-            if (getRooms().get(currentRoomIndex).getDirections().get(index).getDirectionName()
-                    .equalsIgnoreCase(direction)) {
-                isDirectionPossible = true;
-                currentRoomName = getRooms().get(currentRoomIndex).getDirections().get(index).getRoom();
-                break;
-            }
-        }
+
+        boolean isDirectionPossible = checkDirectionValidity(direction);
 
         if (isDirectionPossible) {
-            for (int index = 0; index < getRooms().size(); index++) {
-                if (getRooms().get(index).getName().equals(currentRoomName)) {
-                    currentRoomIndex = index;
-                }
-            }
+            updateRoomIndex();
             adventureOutput();
             return;
         }
         else {
             System.out.println("I can't go " + direction + "!");
+            System.out.println("From here, you can go: " + getValidDirections());
             adventureInput();
         }
+    }
+
+    //----------------------------Helper Functions for Input/Output Functions------------------------------------------
+    public void updateRoomIndex() {
+        for (int roomIndex = 0; roomIndex < getRooms().size(); roomIndex++) {
+            if (getRooms().get(roomIndex).getName().equals(currentRoomName)) {
+                currentRoomIndex = roomIndex;
+            }
+        }
+    }
+
+    public boolean checkDirectionValidity(String direction) {
+        boolean isDirectionPossible = false;
+        int numDirections = getRooms().get(currentRoomIndex).getDirections().size();
+
+        for (int directionIndex = 0; directionIndex < numDirections; directionIndex++) {
+
+            String tempDirectionName =
+                    getRooms().get(currentRoomIndex).getDirections().get(directionIndex).getDirectionName()
+
+            if (tempDirectionName.equalsIgnoreCase(direction)) {
+                isDirectionPossible = true;
+                currentRoomName = getRooms().get(currentRoomIndex).getDirections().get(directionIndex).getRoom();
+                break;
+            }
+
+        }
+        return isDirectionPossible;
+    }
+
+    public String getValidDirections() {
+        String validDirections = "";
+        int numDirections = getRooms().get(currentRoomIndex).getDirections().size();
+
+        for (int directionIndex = 0; directionIndex < numDirections; directionIndex++) {
+
+            String tempDirectionName =
+                    getRooms().get(currentRoomIndex).getDirections().get(directionIndex).getDirectionName();
+
+            if (directionIndex == numDirections - 1) {
+
+                if (directionIndex != 0) {
+                    validDirections += "or ";
+                }
+
+                validDirections += tempDirectionName;
+
+            }
+            else {
+                validDirections += tempDirectionName + ", ";
+            }
+
+        }
+        return validDirections;
     }
 }
