@@ -99,7 +99,7 @@ public class Layout {
         for (int directionIndex = 0; directionIndex < numDirections; directionIndex++) {
 
             String tempDirectionName =
-                    getRooms().get(currentRoomIndex).getDirections().get(directionIndex).getDirectionName()
+                    getRooms().get(currentRoomIndex).getDirections().get(directionIndex).getDirectionName();
 
             if (tempDirectionName.equalsIgnoreCase(direction)) {
                 isDirectionPossible = true;

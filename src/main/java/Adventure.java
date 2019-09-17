@@ -8,6 +8,6 @@ public class Adventure {
         Gson gson = new Gson();
         Layout layout = gson.fromJson(myJSON, Layout.class);
 
-        layout.adventureOutput();
+        layout.adventureBegin();
     }
 }
