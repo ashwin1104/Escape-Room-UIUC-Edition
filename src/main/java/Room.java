@@ -11,6 +11,7 @@ public class Room {
         this.directions = directions;
     }
 
+    // Getters
     public String getName() {
         return name;
     }

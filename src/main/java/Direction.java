@@ -7,6 +7,8 @@ public class Direction {
         this.room = room;
     }
 
+    // Getters
+
     public String getDirectionName() {
         return directionName;
     }

@@ -33,8 +33,26 @@ public class Layout {
         return currentRoomIndex;
     }
 
+    //-----------------------------------Setter Methods for Testing----------------------------------------------------
+    public void setCurrentRoomName(String currentRoomName) {
+        this.currentRoomName = currentRoomName;
+    }
+
+    public void setCurrentRoomIndex(int currentRoomIndex) {
+        this.currentRoomIndex = currentRoomIndex;
+    }
+    public void setStartingRoom(String room) {
+        startingRoom = room;
+    }
+
     //----------------------------------------Starting Room Index Initializer------------------------------------------
+
+    // Initializes currentRoomName and currentRoomIndex based on startingRoom
     public void adventureBegin() {
+        if(startingRoom == null) {
+            System.out.println("No starting room.");
+            return;
+        }
         currentRoomName = startingRoom;
         currentRoomIndex = -1;
         updateRoomIndex();
@@ -44,6 +62,8 @@ public class Layout {
     }
 
     //-----------------------------------------Input/Output Methods----------------------------------------------------
+
+    // Main function for user outputs (description, directions) based on given room
     public void adventureOutput() {
         if (currentRoomName.equals(endingRoom)) {
             System.out.println("You have reached the final room: " + endingRoom + ". Congratulations!");
@@ -62,6 +82,7 @@ public class Layout {
     }
 
 
+    // Function to take in user input
     public void adventureInput() {
         Scanner userResponse = new Scanner(System.in);
         System.out.println("Which direction would you like to go?");
@@ -70,17 +91,22 @@ public class Layout {
         handleDirection(direction);
     }
 
+    // Function to ensure given user input is a correct command
+    // If not, then gives corresponding outputs and redirects to adventureInput()
     public void handleDirection(String direction) {
+        // Null check
         if (direction == null) {
             System.out.println("No input given");
             return;
         }
 
+        // Quit/Exit case
         if (direction.equalsIgnoreCase("exit") || direction.equalsIgnoreCase("quit")) {
                 System.out.println("Bye! Thanks for playing!");
                 return;
         }
 
+        // Checks if go command is used correctly
         if (direction.substring(0,3).equalsIgnoreCase("go ")) {
             boolean isDirectionPossible = checkDirectionValidity(direction.substring(3));
 
@@ -89,6 +115,7 @@ public class Layout {
                 adventureOutput();
                 return;
             }
+            // If go is not used correctly, gives corresponding output and redirects to adventureInput()
             else {
                 System.out.println("I can't " + direction + "!");
                 System.out.println("From here, you can go: " + getValidDirections());
@@ -96,6 +123,7 @@ public class Layout {
             }
 
         }
+        // When go command is not used
         else {
             System.out.println("I don't understand '" + direction + "'");
             System.out.println("From here, you can go: " + getValidDirections());
@@ -104,6 +132,7 @@ public class Layout {
     }
 
     //----------------------------Helper Functions for Input/Output Functions------------------------------------------
+    // updates the currentRoomIndex when user's direction is valid
     public void updateRoomIndex() {
         for (int roomIndex = 0; roomIndex < getRooms().size(); roomIndex++) {
             if (getRooms().get(roomIndex).getName().equals(currentRoomName)) {
@@ -112,6 +141,7 @@ public class Layout {
         }
     }
 
+    // Function for determining if user's direction input is valid for currentRoom
     public boolean checkDirectionValidity(String direction) {
         boolean isDirectionPossible = false;
         int numDirections = getRooms().get(currentRoomIndex).getDirections().size();
@@ -131,6 +161,7 @@ public class Layout {
         return isDirectionPossible;
     }
 
+    // Ouputs list of valid directions to user for current room
     public String getValidDirections() {
         String validDirections = "";
         int numDirections = getRooms().get(currentRoomIndex).getDirections().size();

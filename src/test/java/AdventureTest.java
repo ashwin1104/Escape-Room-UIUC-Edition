@@ -1,26 +1,31 @@
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import com.google.gson.Gson;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+
+import static org.junit.Assert.*;
 
 public class AdventureTest {
+    // Set up Layout object for parsing
     private Layout layout;
-    private ReadJSON read = new ReadJSON();
-    private Adventure adventure = new Adventure();
 
+    // Parses JSON into Layout object
     @Before
     public void setUp() throws IOException {
-        String myJSON = ReadJSON.readFromURL("https://courses.grainger.illinois.edu/cs126/fa2019/assignments/siebel.json");
+        String myJSON =
+                ReadJSON.readFromURL(
+                        "https://courses.grainger.illinois.edu/cs126/fa2019/assignments/siebel.json");
         Gson gson = new Gson();
         layout = gson.fromJson(myJSON, Layout.class);
         layout.adventureBegin();
     }
 
+    // Series of tests to ensure correct parsing
     @Test
     public void knowsEndingRoom() throws Exception {
         assertEquals(layout.getEndingRoom(),"Siebel1314");
@@ -45,6 +50,8 @@ public class AdventureTest {
     public void knowsDirectionRoom() throws Exception {
         assertEquals(layout.getRooms().get(0).getDirections().get(0).getRoom(),"SiebelEntry");
     }
+
+    // Tests to ensure correct initial room name and index after parsing
     @Test
     public void testAdventureBeginRoomNameInitialize() {
         assertEquals(layout.getCurrentRoomName(), layout.getStartingRoom());
@@ -53,17 +60,98 @@ public class AdventureTest {
     public void testAdventureBeginRoomIndexInitialize() {
         assertEquals(layout.getCurrentRoomIndex(), 0);
     }
+
+    //-------------------------------------Function Testing--------------------------------------------------------
+
+    // Series of tests to ensure user's given directions are correctly determined to be valid or invalid
     @Test
-    public void testDirectionValidityProper() {
-        assertTrue(layout.checkDirectionValidity("go East"));
+    public void testDirectionValidityGood() {
+        assertTrue(layout.checkDirectionValidity("go East".substring(3)));
     }
     @Test
-    public void testDirectionValidityIgnoreCaseProper() {
-        assertTrue(layout.checkDirectionValidity("gO eAsT"));
+    public void testDirectionValidityIgnoreCaseGood() {
+        assertTrue(layout.checkDirectionValidity("gO eAsT".substring(3)));
     }
-    /*@Test
-    public void testHandleDirectionProper() {
-        layout.handleDirection("East");
-        assertEquals(layout.getCurrentRoomIndex(),1);
-    }*/
+    @Test
+    public void testDirectionValidityBad() {
+        assertFalse(layout.checkDirectionValidity("go west".substring(3)));
+    }
+
+    // Tests if the directions given to user are correct for given room
+    @Test
+    public void knowsValidDirections() {
+        layout.setCurrentRoomName("SiebelEastHallway");
+        layout.setCurrentRoomIndex(5);
+        assertEquals(layout.getValidDirections(),"West, South, or Down");
+    }
+
+    // Tests if the outputs for each case of user input correctly correspond to each case
+    @Test
+    public void testHandleDirectionNull() {
+        // Source: https://limzhenghong.wordpress.com/2015/03/18/junit-with-system-out-println/
+        OutputStream os = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(os);
+        System.setOut(ps);
+        layout.handleDirection(null);
+        assertEquals("No input given\n", os.toString());
+        PrintStream originalOut = System.out;
+        System.setOut(originalOut);
+    }
+    @Test
+    public void testHandleDirectionExit() {
+        OutputStream os = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(os);
+        System.setOut(ps);
+        layout.handleDirection("exit");
+        assertEquals("Bye! Thanks for playing!\n", os.toString());
+        PrintStream originalOut = System.out;
+        System.setOut(originalOut);
+    }
+    @Test
+    public void testHandleDirectionQuit() {
+        OutputStream os = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(os);
+        System.setOut(ps);
+        layout.handleDirection("quit");
+        assertEquals("Bye! Thanks for playing!\n", os.toString());
+        PrintStream originalOut = System.out;
+        System.setOut(originalOut);
+    }
+    @Test
+    public void testHandleDirectionQuitIgnoreCase() {
+        OutputStream os = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(os);
+        System.setOut(ps);
+        layout.handleDirection("qUiT");
+        assertEquals("Bye! Thanks for playing!\n", os.toString());
+        PrintStream originalOut = System.out;
+        System.setOut(originalOut);
+    }
+
+    // Tests if the output is correct when the room is the same as the endingRoom
+    @Test
+    public void testCurrentRoomIsFinal() {
+        layout.setCurrentRoomName("Siebel1314");
+        layout.setCurrentRoomIndex(6);
+        OutputStream os = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(os);
+        System.setOut(ps);
+        layout.adventureOutput();
+        assertEquals("You have reached the final room: Siebel1314. Congratulations!\n", os.toString());
+        PrintStream originalOut = System.out;
+        System.setOut(originalOut);
+    }
+
+    // Tests case when startingRoom is null, and output correctly corresponds
+    @Test
+    public void testStartingRoomNull() {
+        layout.setStartingRoom(null);
+        OutputStream os = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(os);
+        System.setOut(ps);
+        layout.adventureBegin();
+        assertEquals("No starting room.\n", os.toString());
+        PrintStream originalOut = System.out;
+        System.setOut(originalOut);
+    }
 }
