@@ -106,8 +106,10 @@ public class Layout {
                 return;
         }
 
+        int minLengthOfGoCommand = 3;
         // Checks if go command is used correctly
-        if (direction.substring(0,3).equalsIgnoreCase("go ")) {
+        if (direction.length() >= minLengthOfGoCommand && 
+                direction.substring(0,minLengthOfGoCommand).equalsIgnoreCase("go ")) {
             boolean isDirectionPossible = checkDirectionValidity(direction.substring(3));
 
             if (isDirectionPossible) {
@@ -172,7 +174,6 @@ public class Layout {
                     getRooms().get(currentRoomIndex).getDirections().get(directionIndex).getDirectionName();
 
             if (directionIndex == numDirections - 1) {
-
                 if (directionIndex != 0) {
                     validDirections += "or ";
                 }
