@@ -17,8 +17,7 @@ public class AdventureTest {
     // Parses JSON into Layout object
     @Before
     public void setUp() throws IOException {
-        String myJSON =
-                ReadJSON.readFromURL(
+        String myJSON = Adventure.readFromURL(
                         "https://courses.grainger.illinois.edu/cs126/fa2019/assignments/siebel.json");
         Gson gson = new Gson();
         layout = gson.fromJson(myJSON, Layout.class);
