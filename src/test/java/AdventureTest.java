@@ -16,13 +16,23 @@ public class AdventureTest {
 
     // Parses JSON into Layout object
     @Before
+    public void setUp() throws IOException{
+        // read in JSON file into String variable
+        String myJSON = Data.getFileContents("src","adventure.json");
+        Gson gson = new Gson();
+        // read in String variable of JSON file into network of class declarations
+        layout = gson.fromJson(myJSON, Layout.class);
+    }
+
+    /*
+    @Before
     public void setUp() throws IOException {
         String myJSON = Adventure.readFromURL(
                         "https://courses.grainger.illinois.edu/cs126/fa2019/assignments/siebel.json");
         Gson gson = new Gson();
         layout = gson.fromJson(myJSON, Layout.class);
         layout.adventureBegin();
-    }
+    } */
 
     // Series of tests to ensure correct parsing
     @Test

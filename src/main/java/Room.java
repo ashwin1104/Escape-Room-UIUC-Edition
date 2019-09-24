@@ -4,6 +4,7 @@ public class Room {
     private String name;
     private String description;
     private ArrayList<Direction> directions;
+    private ArrayList<Item> items;
 
     public Room(String name, String description, ArrayList<Direction> directions) {
         this.name = name;

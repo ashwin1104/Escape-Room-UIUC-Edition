@@ -6,6 +6,7 @@ public class Layout {
     private String startingRoom;
     private String endingRoom;
     private ArrayList<Room> rooms;
+    private Player player;
     private String currentRoomName;
     private int currentRoomIndex;
 
@@ -108,7 +109,7 @@ public class Layout {
 
         int minLengthOfGoCommand = 3;
         // Checks if go command is used correctly
-        if (direction.length() >= minLengthOfGoCommand && 
+        if (direction.length() >= minLengthOfGoCommand &&
                 direction.substring(0,minLengthOfGoCommand).equalsIgnoreCase("go ")) {
             boolean isDirectionPossible = checkDirectionValidity(direction.substring(3));
 
