@@ -10,6 +10,7 @@ public class Layout {
     private String currentRoomName;
     private Item currentItem;
     private int currentRoomIndex;
+    private int currentDirectionIndex;
     private boolean isGivenDirectionAvailable;
 
     //-----------------------------------Constructor and Getter Methods------------------------------------------------
@@ -79,6 +80,7 @@ public class Layout {
         if (currentRoomIndex == -1) {
             return "startingRoom is not a room";
         }
+        return "Adventure has begun with flying colors";
     }
 
     //-----------------------------------------Input/Output Methods----------------------------------------------------
@@ -92,7 +94,7 @@ public class Layout {
 
         String currentDesc = getRooms().get(currentRoomIndex).getDescription();
         System.out.println(currentDesc);
-        System.out.println("You can see a " + getListItems() + " here.");
+        System.out.println("You can see " + getListItems() + " here.");
 
         if (currentRoomName.equals(startingRoom)) {
             System.out.println("Your journey begins here");
@@ -100,6 +102,7 @@ public class Layout {
 
         System.out.println("From here, you can go: " + getValidDirections());
         adventureInput();
+        return "adventureOutput final return statement";
     }
 
 
@@ -155,10 +158,13 @@ public class Layout {
             String[] item_direction = givenItemWithDirection.split(" with ");
             String givenItem = item_direction[0];
             String givenDirection = item_direction[1];
-
             boolean isItemUsable = checkItemUsability(givenItem, givenDirection);
-
-            if (isItemUsable) {
+            if (getRooms().get(currentRoomIndex).getDirections().get(currentDirectionIndex).isEnabled()) {
+                System.out.println("This direction is already enabled");
+                adventureOutput();
+            }
+            else if (isItemUsable) {
+                enableGivenDirection();
                 System.out.println("You have successfully enabled the " + givenDirection + " direction");
                 adventureOutput();
             }
@@ -175,7 +181,7 @@ public class Layout {
         else if (command.length() >= minLengthOfGo &&
                 command.substring(0,minLengthOfGo).equalsIgnoreCase("go ")) {
             String givenDirection = command.substring(minLengthOfGo).trim();
-            boolean isDirectionPossible = checkDirectionValidity(givenDirection));
+            boolean isDirectionPossible = checkDirectionValidity(givenDirection);
 
             if (isDirectionPossible) {
                 if (isGivenDirectionAvailable) {
@@ -206,6 +212,7 @@ public class Layout {
             System.out.println("You can see a " + getListItems() + " here.");
             adventureInput();
         }
+        return "handleDirection final return statement";
     }
 
     //----------------------------Helper Functions for Input/Output Functions------------------------------------------
@@ -224,6 +231,10 @@ public class Layout {
         getRooms().get(currentRoomIndex).getItems().remove(currentItem);
     }
 
+    public void enableGivenDirection() {
+        getRooms().get(currentRoomIndex).getDirections().get(currentDirectionIndex).setEnabled(true);
+    }
+
     // Function for determining if user's direction input is valid for currentRoom
     public boolean checkDirectionValidity(String direction) {
         boolean isDirectionPossible = false;
@@ -236,6 +247,7 @@ public class Layout {
 
             if (tempDirect.equalsIgnoreCase(direction)) {
                 isDirectionPossible = true;
+                currentDirectionIndex = directionIndex;
                 currentRoomName = tempRoomName;
                 isGivenDirectionAvailable =
                         getRooms().get(currentRoomIndex).getDirections().get(directionIndex)
@@ -266,6 +278,22 @@ public class Layout {
         return isItemAvailable;
     }
 
+    public boolean checkItemUsability(String givenItem, String givenDirection) {
+        if (checkDirectionValidity(givenDirection)) {
+            int numItemsForPlayer = getPlayer().getItems().size();
+            for (int itemIndex = 0; itemIndex < numItemsForPlayer; itemIndex++) {
+                String tempItemName = getPlayer().getItems().get(itemIndex).getName();
+                if (tempItemName.equalsIgnoreCase(givenItem)) {
+                    if (getRooms().get(currentRoomIndex).getDirections().get(currentDirectionIndex).getValidKeyNames().contains(givenItem)) {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
     // Ouputs list of valid directions to user for current room
     public String getValidDirections() {
         String validDirections = "";
@@ -299,9 +327,11 @@ public class Layout {
 
     // Ouputs list of items the user may pick up from the given room
     public String getListItems() {
-        String listItems = "";
+        String listItems = "a ";
         int numItems = getRooms().get(currentRoomIndex).getItems().size();
-
+        if (numItems == 0) {
+            return "no items";
+        }
         for (int itemIndex = 0; itemIndex < numItems; itemIndex++) {
 
             String tempItemName =
@@ -319,6 +349,9 @@ public class Layout {
                 if (itemIndex != 0 || numItems != 2) {
                     listItems += tempItemName + ", ";
 
+                }
+                else {
+                    listItems += tempItemName + " ";
                 }
             }
         }

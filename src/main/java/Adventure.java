@@ -48,9 +48,10 @@ public class Adventure {
     }
 
     public static void main(String[] args) throws IOException {
-        // Parses JSON into classes and instance fields
-        String myJSON = readFromURL(getURLFromUser());
+        // read in JSON file into String variable
+        String myJSON = Data.getFileContents("src", "adventure.json");
         Gson gson = new Gson();
+        // read in String variable of JSON file into network of class declarations
         Layout layout = gson.fromJson(myJSON, Layout.class);
 
         // Begins I/O process

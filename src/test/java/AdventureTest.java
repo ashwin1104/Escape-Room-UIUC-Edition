@@ -1,5 +1,4 @@
 import com.google.gson.Gson;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +17,7 @@ public class AdventureTest {
     @Before
     public void setUp() throws IOException{
         // read in JSON file into String variable
-        String myJSON = Data.getFileContents("src","adventure.json");
+        String myJSON = Data.getFileContents("src", "src/adventure.json");
         Gson gson = new Gson();
         // read in String variable of JSON file into network of class declarations
         layout = gson.fromJson(myJSON, Layout.class);
