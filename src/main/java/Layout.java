@@ -292,11 +292,13 @@ public class Layout {
         getRooms().get(currentRoomIndex).getItems().remove(currentItem);
     }
 
+    // updates player and room items when item is dropped validly
     public void reverseUpdatePlayerAndAvailableItems() {
         getPlayer().getItems().remove(currentItem);
         getRooms().get(currentRoomIndex).getItems().add(currentItem);
     }
 
+    // enables the given direction from user input
     public void enableGivenDirection() {
         getRooms().get(currentRoomIndex).getDirections().get(currentDirectionIndex).setEnabled(true);
     }
@@ -327,6 +329,13 @@ public class Layout {
 
     // Function for determining if user's direction input is valid for currentRoom
     public boolean checkItemAvailability(String givenItem) {
+        if (givenItem == null) {
+            return false;
+        }
+        else if (givenItem.length() == 0) {
+            return false;
+        }
+
         boolean isItemAvailable = false;
         int numItems = getRooms().get(currentRoomIndex).getItems().size();
 
@@ -344,7 +353,14 @@ public class Layout {
         return isItemAvailable;
     }
 
+    // checks if item can be used successfully for the given direction
     public boolean checkItemUsability(String givenItem, String givenDirection) {
+        if (givenItem == null || givenDirection == null) {
+            return false;
+        }
+        else if (givenItem.length() == 0 || givenDirection.length() == 0) {
+            return false;
+        }
         if (checkDirectionValidity(givenDirection)) {
             int numItemsForPlayer = getPlayer().getItems().size();
             for (int itemIndex = 0; itemIndex < numItemsForPlayer; itemIndex++) {
@@ -364,7 +380,14 @@ public class Layout {
         return false;
     }
 
+    // checks if item can successfully be dropped into the room
     public boolean checkItemDrop(String givenItem) {
+        if (givenItem == null) {
+            return false;
+        }
+        else if (givenItem.length() == 0) {
+            return false;
+        }
         boolean isItemDroppable = false;
         int numItems = getPlayer().getItems().size();
 
@@ -382,7 +405,7 @@ public class Layout {
         return isItemDroppable;
     }
 
-    // Ouputs list of valid directions to user for current room
+    // Outputs list of valid directions to user for current room
     public String getValidDirections() {
         String validDirections = "";
         int numDirections = getRooms().get(currentRoomIndex).getDirections().size();
@@ -448,6 +471,8 @@ public class Layout {
         }
         return listItems;
     }
+
+    // returns formatted list of player's item names
     public String getInventory() {
         String listItems = "";
         int numItems = getPlayer().getItems().size();
@@ -480,6 +505,7 @@ public class Layout {
         return listItems;
     }
 
+    // method for outputting puzzle for the northeast direction to user
     public void passesPuzzleOne() {
         System.out.println("Solve the following equation for x: x - 6 = 21");
         System.out.print("x = ");

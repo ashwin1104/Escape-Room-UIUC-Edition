@@ -163,4 +163,29 @@ public class AdventureTest {
     public void testBadGoCommand() {
         assertEquals(layout.handleDirection("goal"), "incorrectly used go command");
     }
+
+    @Test
+    public void testItemAvailabilityNull() {
+        assertFalse(layout.checkItemAvailability(null));
+    }
+    @Test
+    public void testItemAvailabilityEmpty() {
+        assertFalse(layout.checkItemAvailability(""));
+    }
+    @Test
+    public void testItemDropNull() {
+        assertFalse(layout.checkItemDrop(null));
+    }
+    @Test
+    public void testItemDropEmpty() {
+        assertFalse(layout.checkItemDrop(""));
+    }
+    @Test
+    public void testItemUsabilityNull() {
+        assertFalse(layout.checkItemUsability(null, null));
+    }
+    @Test
+    public void testItemUsabilityEmpty() {
+        assertFalse(layout.checkItemUsability("", ""));
+    }
 }
