@@ -132,11 +132,29 @@ public class Layout {
         }
 
         int minLengthOfPickup = 7;
+        int minLengthOfDrop = 5;
         int minLengthOfUse = 4;
         int minLengthOfGo = 3;
 
         if (command.equalsIgnoreCase("examine")) {
             adventureOutput();
+        }
+        else if (command.length() >= minLengthOfDrop &&
+                command.substring(0, minLengthOfDrop).equalsIgnoreCase("drop ")) {
+            String givenItem = command.substring(minLengthOfDrop).trim();
+            boolean isItemDroppable = checkItemDrop(givenItem);
+
+            if (isItemDroppable) {
+                reverseUpdatePlayerAndAvailableItems();
+                adventureOutput();
+            }
+            else {
+                System.out.println("I can't " + command + "!");
+                System.out.println("From here, you can go: " + getValidDirections());
+                System.out.println("You can see " + getListItems() + " here.");
+                System.out.println("You currently hold the following items: " + getInventory());
+                adventureInput();
+            }
         }
         // Checks if pickup command is used correctly
         else if (command.length() >= minLengthOfPickup &&
@@ -239,6 +257,11 @@ public class Layout {
         getRooms().get(currentRoomIndex).getItems().remove(currentItem);
     }
 
+    public void reverseUpdatePlayerAndAvailableItems() {
+        getPlayer().getItems().remove(currentItem);
+        getRooms().get(currentRoomIndex).getItems().add(currentItem);
+    }
+
     public void enableGivenDirection() {
         getRooms().get(currentRoomIndex).getDirections().get(currentDirectionIndex).setEnabled(true);
     }
@@ -305,6 +328,25 @@ public class Layout {
         }
         return false;
     }
+
+    public boolean checkItemDrop(String givenItem) {
+        boolean isItemDroppable = false;
+        int numItems = getPlayer().getItems().size();
+
+        for (int itemIndex = 0; itemIndex < numItems; itemIndex++) {
+
+            String tempItemName = getPlayer().getItems().get(itemIndex).getName();
+
+            if (tempItemName.equalsIgnoreCase(givenItem)) {
+                isItemDroppable = true;
+                currentItem = getPlayer().getItems().get(itemIndex);
+                break;
+            }
+
+        }
+        return isItemDroppable;
+    }
+
     // Ouputs list of valid directions to user for current room
     public String getValidDirections() {
         String validDirections = "";
