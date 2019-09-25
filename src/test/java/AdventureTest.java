@@ -188,4 +188,12 @@ public class AdventureTest {
     public void testItemUsabilityEmpty() {
         assertFalse(layout.checkItemUsability("", ""));
     }
+    @Test
+    public void testListItems() {
+        assertEquals(layout.getListItems(), "a coin");
+    }
+    @Test
+    public void testInventory() {
+        assertEquals(layout.getInventory(), "axe and bomb");
+    }
 }
