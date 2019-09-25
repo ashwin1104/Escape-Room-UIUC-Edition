@@ -101,6 +101,7 @@ public class Layout {
         }
 
         System.out.println("From here, you can go: " + getValidDirections());
+        System.out.println("You currently hold the following items: " + getInventory());
         adventureInput();
         return "adventureOutput final return statement";
     }
@@ -133,8 +134,12 @@ public class Layout {
         int minLengthOfPickup = 7;
         int minLengthOfUse = 4;
         int minLengthOfGo = 3;
+
+        if (command.equalsIgnoreCase("examine")) {
+            adventureOutput();
+        }
         // Checks if pickup command is used correctly
-        if (command.length() >= minLengthOfPickup &&
+        else if (command.length() >= minLengthOfPickup &&
                 command.substring(0, minLengthOfPickup).equalsIgnoreCase("pickup ")) {
             String givenItem = command.substring(minLengthOfPickup).trim();
             boolean isItemAvailable = checkItemAvailability(givenItem);
@@ -146,7 +151,8 @@ public class Layout {
             else {
                 System.out.println("I can't " + command + "!");
                 System.out.println("From here, you can go: " + getValidDirections());
-                System.out.println("You can see a " + getListItems() + " here.");
+                System.out.println("You can see " + getListItems() + " here.");
+                System.out.println("You currently hold the following items: " + getInventory());
                 adventureInput();
             }
         }
@@ -172,7 +178,8 @@ public class Layout {
             else {
                 System.out.println("I can't " + command + "!");
                 System.out.println("From here, you can go: " + getValidDirections());
-                System.out.println("You can see a " + getListItems() + " here.");
+                System.out.println("You can see " + getListItems() + " here.");
+                System.out.println("You currently hold the following items: " + getInventory());
                 adventureInput();
             }
 
@@ -192,7 +199,8 @@ public class Layout {
                     System.out.println("The direction '" + givenDirection + "' is disabled.");
                     System.out.println("To enable it, use a valid item from your inventory.");
                     System.out.println("From here, you can go: " + getValidDirections());
-                    System.out.println("You can see a " + getListItems() + " here.");
+                    System.out.println("You can see " + getListItems() + " here.");
+                    System.out.println("You currently hold the following items: " + getInventory());
                     adventureInput();
                 }
             }
@@ -200,7 +208,7 @@ public class Layout {
             else {
                 System.out.println("I can't " + command + "!");
                 System.out.println("From here, you can go: " + getValidDirections());
-                System.out.println("You can see a " + getListItems() + " here.");
+                System.out.println("You can see " + getListItems() + " here.");
                 adventureInput();
             }
 
@@ -209,7 +217,7 @@ public class Layout {
         else {
             System.out.println("I don't understand '" + command + "'");
             System.out.println("From here, you can go: " + getValidDirections());
-            System.out.println("You can see a " + getListItems() + " here.");
+            System.out.println("You can see " + getListItems() + " here.");
             adventureInput();
         }
         return "handleDirection final return statement";
@@ -284,7 +292,10 @@ public class Layout {
             for (int itemIndex = 0; itemIndex < numItemsForPlayer; itemIndex++) {
                 String tempItemName = getPlayer().getItems().get(itemIndex).getName();
                 if (tempItemName.equalsIgnoreCase(givenItem)) {
-                    if (getRooms().get(currentRoomIndex).getDirections().get(currentDirectionIndex).getValidKeyNames().contains(givenItem)) {
+                    if (getRooms().get(currentRoomIndex).getDirections()
+                            .get(currentDirectionIndex).getValidKeyNames().contains(givenItem)) {
+                        currentItem = getPlayer().getItems().get(itemIndex);
+                        getPlayer().getItems().remove(currentItem);
                         return true;
                     }
                     return false;
@@ -312,12 +323,15 @@ public class Layout {
                     validDirections += "or ";
                 }
 
-                validDirections += tempDirectionName;
+                validDirections += tempDirectionName + " ";
 
             }
             else {
                 if (directionIndex != 0 || numDirections != 2) {
                     validDirections += tempDirectionName + ", ";
+                }
+                else {
+                    validDirections += tempDirectionName + " ";
                 }
             }
 
@@ -336,6 +350,37 @@ public class Layout {
 
             String tempItemName =
                     getRooms().get(currentRoomIndex).getItems().get(itemIndex).getName();
+
+            if (itemIndex == numItems - 1) {
+                if (itemIndex != 0) {
+                    listItems += "and ";
+                }
+
+                listItems += tempItemName;
+
+            }
+            else {
+                if (itemIndex != 0 || numItems != 2) {
+                    listItems += tempItemName + ", ";
+
+                }
+                else {
+                    listItems += tempItemName + " ";
+                }
+            }
+        }
+        return listItems;
+    }
+    public String getInventory() {
+        String listItems = "";
+        int numItems = getPlayer().getItems().size();
+        if (numItems == 0) {
+            return "no items";
+        }
+        for (int itemIndex = 0; itemIndex < numItems; itemIndex++) {
+
+            String tempItemName =
+                    getPlayer().getItems().get(itemIndex).getName();
 
             if (itemIndex == numItems - 1) {
                 if (itemIndex != 0) {
