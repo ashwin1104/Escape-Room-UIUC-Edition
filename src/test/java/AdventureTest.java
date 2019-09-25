@@ -17,21 +17,12 @@ public class AdventureTest {
     @Before
     public void setUp() throws IOException{
         // read in JSON file into String variable
-        String myJSON = Data.getFileContents("src", "src/adventure.json");
+        String myJSON = Data.getFileContents("src", "adventure.json");
         Gson gson = new Gson();
         // read in String variable of JSON file into network of class declarations
         layout = gson.fromJson(myJSON, Layout.class);
-    }
-
-    /*
-    @Before
-    public void setUp() throws IOException {
-        String myJSON = Adventure.readFromURL(
-                        "https://courses.grainger.illinois.edu/cs126/fa2019/assignments/siebel.json");
-        Gson gson = new Gson();
-        layout = gson.fromJson(myJSON, Layout.class);
         layout.adventureBegin();
-    } */
+    }
 
     // Series of tests to ensure correct parsing
     @Test
@@ -69,6 +60,15 @@ public class AdventureTest {
         assertEquals(layout.getCurrentRoomIndex(), 0);
     }
 
+    @Test
+    public void testPlayerItems() {
+        assertEquals(layout.getPlayer().getItems().get(1).getName(), "bomb");
+    }
+
+    @Test
+    public void testPlayerItems() {
+        assertEquals(layout.getPlayer().getItems().get(1).getName(), "bomb");
+    }
     //-------------------------------------Function Testing--------------------------------------------------------
 
     // Series of tests to ensure user's given directions are correctly determined to be valid or invalid
@@ -90,7 +90,7 @@ public class AdventureTest {
     public void knowsValidDirections() {
         layout.setCurrentRoomName("SiebelEastHallway");
         layout.setCurrentRoomIndex(5);
-        assertEquals(layout.getValidDirections(),"West, South, or Down");
+        assertEquals(layout.getValidDirections(),"West, South, or Down ");
     }
 
     // Tests if the outputs for each case of user input correctly correspond to each case
@@ -136,20 +136,6 @@ public class AdventureTest {
         System.setOut(originalOut);
     }
 
-    // Tests if the output is correct when the room is the same as the endingRoom
-    @Test
-    public void testCurrentRoomIsFinal() {
-        layout.setCurrentRoomName("Siebel1314");
-        layout.setCurrentRoomIndex(6);
-        OutputStream os = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(os);
-        System.setOut(ps);
-        layout.adventureOutput();
-        assertEquals("You have reached the final room: Siebel1314. Congratulations!\n", os.toString());
-        PrintStream originalOut = System.out;
-        System.setOut(originalOut);
-    }
-
     // Tests case when startingRoom is null, and output correctly corresponds
     @Test
     public void testStartingRoomNull() {
@@ -162,4 +148,6 @@ public class AdventureTest {
         PrintStream originalOut = System.out;
         System.setOut(originalOut);
     }
+
+
 }

@@ -16,7 +16,6 @@ public class Layout {
     private long startTime;
     private long endTime;
     private boolean passedPuzzleOne = false;
-    private boolean passedPuzzleTwo = false;
 
 
 
@@ -153,7 +152,6 @@ public class Layout {
         // Quit/Exit case
         if (command.equalsIgnoreCase("exit") || command.equalsIgnoreCase("quit")) {
                 System.out.println("Bye! Thanks for playing!");
-                System.exit(0);
                 return "player has quit game";
         }
 
