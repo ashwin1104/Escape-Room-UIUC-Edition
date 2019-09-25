@@ -15,6 +15,9 @@ public class Layout {
     private int countMoves;
     private long startTime;
     private long endTime;
+    private boolean passedPuzzleOne = false;
+    private boolean passedPuzzleTwo = false;
+
 
 
     //-----------------------------------Constructor and Getter Methods------------------------------------------------
@@ -150,6 +153,7 @@ public class Layout {
         // Quit/Exit case
         if (command.equalsIgnoreCase("exit") || command.equalsIgnoreCase("quit")) {
                 System.out.println("Bye! Thanks for playing!");
+                System.exit(0);
                 return "player has quit game";
         }
 
@@ -206,7 +210,7 @@ public class Layout {
             String givenDirection = item_direction[1];
             boolean isItemUsable = checkItemUsability(givenItem, givenDirection);
             if (getRooms().get(currentRoomIndex).getDirections().get(currentDirectionIndex).isEnabled()) {
-                System.out.println("This direction is already enabled");
+                System.out.println("This direction is already enabled or the direction is invalid.");
                 adventureOutput();
             }
             else if (isItemUsable) {
@@ -232,6 +236,12 @@ public class Layout {
 
             if (isDirectionPossible) {
                 if (isGivenDirectionAvailable) {
+                    if (givenDirection.equalsIgnoreCase("Northeast")) {
+                        if (!passedPuzzleOne) {
+                            passesPuzzleOne();
+                            enableGivenDirection();
+                        }
+                    }
                     updateRoomIndex();
                     adventureOutput();
                 }
@@ -465,5 +475,21 @@ public class Layout {
             }
         }
         return listItems;
+    }
+
+    public void passesPuzzleOne() {
+        System.out.println("Solve the following equation for x: x - 6 = 21");
+        System.out.print("x = ");
+        Scanner userResponse = new Scanner(System.in);
+        String answer = userResponse.nextLine();
+        if (answer.equals("27")) {
+            System.out.println("You have passed the challenge and travel northeast successfully.");
+            passedPuzzleOne = true;
+        }
+        else {
+            System.out.println("Puzzle failed. Direction remains disabled");
+            passedPuzzleOne = false;
+            adventureOutput();
+        }
     }
 }
