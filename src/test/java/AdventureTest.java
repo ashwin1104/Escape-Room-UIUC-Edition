@@ -66,8 +66,13 @@ public class AdventureTest {
     }
 
     @Test
-    public void testPlayerItems() {
-        assertEquals(layout.getPlayer().getItems().get(1).getName(), "bomb");
+    public void knowsDirectionKeys() {
+        assertEquals(layout.getRooms().get(0).getDirections().get(0).getValidKeyNames().get(0), "axe");
+    }
+
+    @Test
+    public void knowsRoomItems() {
+        assertEquals(layout.getRooms().get(0).getItems().get(0).getName(), "coin");
     }
     //-------------------------------------Function Testing--------------------------------------------------------
 
@@ -149,5 +154,13 @@ public class AdventureTest {
         System.setOut(originalOut);
     }
 
+    @Test
+    public void testEmptyStringCommand() {
+        assertEquals(layout.handleDirection(""), "empty string");
+    }
 
+    @Test
+    public void testBadGoCommand() {
+        assertEquals(layout.handleDirection("goal"), "incorrectly used go command");
+    }
 }

@@ -148,7 +148,12 @@ public class Layout {
             System.out.println("No input given");
             return "null input";
         }
-
+        else if (command.length() == 0) {
+            return "empty string";
+        }
+        else if (command.contains("go") && !command.contains("go ")) {
+            return "incorrectly used go command";
+        }
         // Quit/Exit case
         if (command.equalsIgnoreCase("exit") || command.equalsIgnoreCase("quit")) {
                 System.out.println("Bye! Thanks for playing!");
