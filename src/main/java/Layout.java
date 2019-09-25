@@ -12,6 +12,10 @@ public class Layout {
     private int currentRoomIndex;
     private int currentDirectionIndex;
     private boolean isGivenDirectionAvailable;
+    private int countMoves;
+    private long startTime;
+    private long endTime;
+
 
     //-----------------------------------Constructor and Getter Methods------------------------------------------------
 
@@ -54,6 +58,17 @@ public class Layout {
         return currentRoomIndex;
     }
 
+    public int getCurrentDirectionIndex() {
+        return currentDirectionIndex;
+    }
+
+    public int getCountMoves() {
+        return countMoves;
+    }
+
+    public Item getCurrentItem() {
+        return currentItem;
+    }
     //-----------------------------------Setter Methods for Testing----------------------------------------------------
     public void setCurrentRoomName(String currentRoomName) {
         this.currentRoomName = currentRoomName;
@@ -70,6 +85,7 @@ public class Layout {
 
     // Initializes currentRoomName and currentRoomIndex based on startingRoom
     public String adventureBegin() {
+        startTime = System.nanoTime();
         if(startingRoom == null) {
             System.out.println("No starting room.");
             return "No starting room";
@@ -89,6 +105,11 @@ public class Layout {
     public String adventureOutput() {
         if (currentRoomName.equals(endingRoom)) {
             System.out.println("You have reached the final room: " + endingRoom + ". Congratulations!");
+            endTime = System.nanoTime();
+            long conversionToMS = 1000000;
+            long conversionToSeconds = 1000;
+            long duration = ((endTime - startTime)/conversionToMS)/conversionToSeconds;
+            System.out.println("You took " + duration + " seconds and " + countMoves + " moves to finish the game.");
             return "final room reached";
         }
 
@@ -113,6 +134,7 @@ public class Layout {
         System.out.println("Which item would you like to pick up or use? Or, which direction would you like to go?");
 
         String direction = userResponse.nextLine();
+        countMoves++;
         handleDirection(direction);
     }
 
@@ -358,7 +380,7 @@ public class Layout {
                     getRooms().get(currentRoomIndex).getDirections().get(directionIndex).getDirectionName();
 
             if (directionIndex == numDirections - 1) {
-                if (directionIndex == 1) {
+                if (directionIndex == 1 && numDirections != 2) {
                     validDirections = validDirections.substring(0,validDirections.length() - 1);
                 }
                 if (directionIndex != 0) {
@@ -381,7 +403,7 @@ public class Layout {
         return validDirections;
     }
 
-    // Ouputs list of items the user may pick up from the given room
+    // Outputs list of items the user may pick up from the given room
     public String getListItems() {
         String listItems = "a ";
         int numItems = getRooms().get(currentRoomIndex).getItems().size();
