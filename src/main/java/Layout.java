@@ -18,12 +18,11 @@ public class Layout {
     private boolean passedPuzzleOne = false;
 
 
-
-    //-----------------------------------Constructor and Getter Methods------------------------------------------------
-
     public Layout() {
     }
-
+    
+    //-----------------------------------Getter Methods------------------------------------------------
+    
     public String getStartingRoom() {
         return startingRoom;
     }
@@ -71,7 +70,9 @@ public class Layout {
     public Item getCurrentItem() {
         return currentItem;
     }
+    
     //-----------------------------------Setter Methods for Testing----------------------------------------------------
+    
     public void setCurrentRoomName(String currentRoomName) {
         this.currentRoomName = currentRoomName;
     }
